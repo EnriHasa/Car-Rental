@@ -23,9 +23,7 @@ public class CarDto {
     private int year;
     private String fuel;
     private List<ReservationDto> reservationDtoList;
-
     private Long clientId;
-
     private String clientName;
     private String clientSurname;
 }

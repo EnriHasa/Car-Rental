@@ -27,24 +27,37 @@ public class CarService {
     private ClientRepository clientRepository;
     private ReservationMapper reservationMapper;
     private ReservationRepository reservationRepository;
-    public CarDto save (CarDto carDto){
+    public CarDto save(CarDto carDto) {
         Car car = carMapper.mapToEntity(carDto);
         Optional<Client> foundClient = clientRepository.findById(carDto.getClientId());
-        if(foundClient.isPresent()){
+
+        if (foundClient.isPresent()) {
             car.setClient(foundClient.get());
         }
+
         Car savedCar = carRepository.save(car);
-        Set<Reservation> reservations = new HashSet<>();
-        for (ReservationDto reservationDto : carDto.getReservationDtoList()){
-            Reservation reservation = reservationMapper.mapToEntity(reservationDto);
-            reservation.setCar(savedCar);
-            reservationRepository.save(reservation);
-            reservations.add(reservation);
+
+
+        if (carDto.getReservationDtoList() != null) {
+            Set<Reservation> reservations = new HashSet<>();
+
+            for (ReservationDto reservationDto : carDto.getReservationDtoList()) {
+                Reservation reservation = reservationMapper.mapToEntity(reservationDto);
+                reservation.setCar(savedCar);
+                reservationRepository.save(reservation);
+                reservations.add(reservation);
+            }
+
+            Car existingCar = carRepository.findById(savedCar.getId())
+                    .orElseThrow(() -> new RuntimeException("Car with id: " + savedCar.getId() + " was not found in the database"));
+
+            existingCar.getReservations().addAll(reservations);
+
+            return carMapper.mapToDto(existingCar);
+        } else {
+
+            return carMapper.mapToDto(savedCar);
         }
-        Car existingCar = carRepository.findById(savedCar.getId())
-                .orElseThrow(()-> new RuntimeException("Car with id: " + savedCar.getId() + " was not found in the database"));
-        existingCar.getReservations().addAll(reservations);
-        return carMapper.mapToDto(existingCar);
     }
     public List<CarDto> findAll(){
         List<Car> carList = carRepository.findAll();
