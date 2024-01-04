@@ -27,13 +27,12 @@ public class CarService {
     private ClientRepository clientRepository;
     private ReservationMapper reservationMapper;
     private ReservationRepository reservationRepository;
+
     public CarDto save(CarDto carDto) {
         Car car = carMapper.mapToEntity(carDto);
         Optional<Client> foundClient = clientRepository.findById(carDto.getClientId());
 
-        if (foundClient.isPresent()) {
-            car.setClient(foundClient.get());
-        }
+        foundClient.ifPresent(car::setClient);
 
         Car savedCar = carRepository.save(car);
 
@@ -59,37 +58,52 @@ public class CarService {
             return carMapper.mapToDto(savedCar);
         }
     }
-    public List<CarDto> findAll(){
+
+    public List<CarDto> findAll() {
         List<Car> carList = carRepository.findAll();
         return carList.stream().map(car -> carMapper.mapToDto(car)).collect(Collectors.toList());
     }
+
     public CarDto findById(Long carId) {
         Car existingCar = carRepository.findById(carId)
                 .orElseThrow(() -> new RuntimeException("Car with id: " + carId + " was not found in database"));
         return carMapper.mapToDto(existingCar);
     }
 
-    public CarDto update (CarDto carDto, Long carId){
-       Optional<Car> existingCar = carRepository.findById(carId);
-       Client client = clientRepository.findById(carDto.getClientId())
-               .orElseThrow(()-> new RuntimeException("Client with id: " + carDto.getClientId() + " not found in database"));
-       if (existingCar.isPresent()){
-           Car carToUpdate = existingCar.get();
-           carToUpdate.setId(carId);
-           carToUpdate.setModel(carDto.getModel());
-           carToUpdate.setType(carDto.getType());
-           carToUpdate.setYear(carDto.getYear());
-           carToUpdate.setFuel(carDto.getFuel());
-           carToUpdate.setClient(client);
-           Car savedCar = carRepository.save(carToUpdate);
-           return carMapper.mapToDto(savedCar);
-       }else {throw new RuntimeException("Car not found with ID: " + carId);}
+    public CarDto update(CarDto carDto, Long carId) {
+        Optional<Car> existingCar = carRepository.findById(carId);
+
+        if (existingCar.isPresent()) {
+            Car carToUpdate = existingCar.get();
+
+            carToUpdate.setId(carId);
+            carToUpdate.setModel(carDto.getModel());
+            carToUpdate.setType(carDto.getType());
+            carToUpdate.setYear(carDto.getYear());
+            carToUpdate.setFuel(carDto.getFuel());
+
+
+            Client client = clientRepository.findById(carDto.getClientId()).orElse(null);
+
+
+            carToUpdate.setClient(client);
+
+
+            Car savedCar = carRepository.save(carToUpdate);
+
+
+            return carMapper.mapToDto(savedCar);
+        } else {
+            throw new RuntimeException("Car not found with ID: " + carId);
+        }
     }
 
-    public void delete(Long carId){
+    public void delete(Long carId) {
         Optional<Car> existingCar = carRepository.findById(carId);
-        if(existingCar.isPresent()){
+        if (existingCar.isPresent()) {
             carRepository.delete(existingCar.get());
-        }else{throw new RuntimeException("Car not found with ID: " + carId);}
+        } else {
+            throw new RuntimeException("Car not found with ID: " + carId);
+        }
     }
 }

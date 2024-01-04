@@ -1,10 +1,7 @@
 package com.example.Car_Rental.controller;
 
-import com.example.Car_Rental.dto.CarDto;
 import com.example.Car_Rental.dto.ReservationDto;
-import com.example.Car_Rental.service.CarService;
 import com.example.Car_Rental.service.ReservationService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

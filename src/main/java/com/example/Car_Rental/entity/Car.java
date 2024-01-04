@@ -33,10 +33,10 @@ public class Car {
     private int year;
     private String fuel;
 
-    @OneToMany(mappedBy = "car",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "client_id")
     private Client client;
 }

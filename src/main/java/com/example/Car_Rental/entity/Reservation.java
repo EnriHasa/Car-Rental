@@ -19,10 +19,10 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Date cannot be null")
-    @Temporal(TemporalType.DATE) //shto vetem daten jo oren ne kete format viti-muaji-data
+    @Temporal(TemporalType.DATE)
     private LocalDate date_from;
     @NotNull(message = "Date cannot be null")
-    @Temporal(TemporalType.DATE) //shto vetem daten jo oren ne kete format viti-muaji-data
+    @Temporal(TemporalType.DATE)
     private LocalDate date_to;
     private double price;
 

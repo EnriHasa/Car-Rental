@@ -5,7 +5,7 @@ import com.example.Car_Rental.entity.Client;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
+
 
 @AllArgsConstructor
 @Component
@@ -13,7 +13,6 @@ public class ClientMapper {
     private ReservationMapper reservationMapper;
     public Client mapToEntity(ClientDto clientDto){
         Client client = new Client();
-        //client.setId(clientDto.getId());
         client.setFirstname(clientDto.getFirstname());
         client.setSurname(clientDto.getSurname());
         client.setEmail(clientDto.getEmail());

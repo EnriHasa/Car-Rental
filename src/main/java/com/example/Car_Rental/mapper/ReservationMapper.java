@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 public class ReservationMapper {
     public Reservation mapToEntity(ReservationDto reservationDto){
         Reservation reservation = new Reservation();
-        //reservation.setId(reservationDto.getId());
         reservation.setDate_from(reservationDto.getDate_from());
         reservation.setDate_to(reservationDto.getDate_to());
         reservation.setPrice(reservationDto.getPrice());

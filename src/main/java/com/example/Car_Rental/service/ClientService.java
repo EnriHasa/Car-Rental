@@ -7,7 +7,6 @@ import com.example.Car_Rental.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.event.ListDataEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,30 +16,30 @@ public class ClientService {
     private ClientRepository clientRepository;
     private ClientMapper clientMapper;
 
-    public ClientDto save (ClientDto clientDto){
+    public ClientDto save(ClientDto clientDto) {
         Client client = clientMapper.mapToEntity(clientDto);
         Client savedClient = clientRepository.save(client);
         return clientMapper.mapToDto(savedClient);
     }
 
-    public ClientDto findClientById(long clientId){
+    public ClientDto findClientById(long clientId) {
         Client foundClient = clientRepository.findById(clientId)
-                .orElseThrow(()-> new RuntimeException("Client with ID: " + clientId + " was not found"));
+                .orElseThrow(() -> new RuntimeException("Client with ID: " + clientId + " was not found"));
         return clientMapper.mapToDto(foundClient);
     }
 
-    public List<ClientDto> findAll(){
+    public List<ClientDto> findAll() {
         List<Client> clients = clientRepository.findAll();
         List<ClientDto> returnClientDto = new ArrayList<>();
-        for(Client client : clients){
+        for (Client client : clients) {
             returnClientDto.add(clientMapper.mapToDto(client));
         }
         return returnClientDto;
     }
 
-    public ClientDto updateById(ClientDto clientDto, long clientId){
+    public ClientDto updateById(ClientDto clientDto, long clientId) {
         Client foundClient = clientRepository.findById(clientId)
-                .orElseThrow(()-> new RuntimeException("Client with ID " + clientId + "was not found"));
+                .orElseThrow(() -> new RuntimeException("Client with ID " + clientId + "was not found"));
         foundClient.setId(clientId);
         foundClient.setFirstname(clientDto.getFirstname());
         foundClient.setSurname(clientDto.getSurname());
@@ -52,9 +51,9 @@ public class ClientService {
         return clientMapper.mapToDto(updatedClient);
     }
 
-    public void deleteById(long clientId){
+    public void deleteById(long clientId) {
         Client foundClient = clientRepository.findById(clientId)
-                .orElseThrow(()->new RuntimeException("Client with ID: "+ clientId + " was not found"));
+                .orElseThrow(() -> new RuntimeException("Client with ID: " + clientId + " was not found"));
         clientRepository.delete(foundClient);
     }
 }

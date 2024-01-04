@@ -33,5 +33,5 @@ public class Client {
     private int age;
     private String password;
     @OneToMany(mappedBy = "client",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<Car> cars; //nje klient mund te marr me shume se nje makine
+    private Set<Car> cars;
 }
